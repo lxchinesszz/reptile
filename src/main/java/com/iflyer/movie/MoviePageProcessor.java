@@ -1,10 +1,11 @@
-package com.iflyer;
+package com.iflyer.movie;
 
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 import java.util.Iterator;
@@ -28,6 +29,7 @@ public class MoviePageProcessor implements PageProcessor {
             if (nav.endsWith("nav-link")) {
                 String context = next.text();
                 String nextUrl = next.absUrl("href");
+                page.addTargetRequest(nextUrl);
                 System.out.printf("添加分类:%s,地址:%s", context, nextUrl);
                 System.out.println();
             }
@@ -51,5 +53,9 @@ public class MoviePageProcessor implements PageProcessor {
 
     public Site getSite() {
         return site;
+    }
+
+    public static void main(String[] args) {
+        Spider.create(new MoviePageProcessor()).addUrl("http://www.kb20.cc/").thread(50).run();
     }
 }
